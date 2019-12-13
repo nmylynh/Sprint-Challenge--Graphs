@@ -21,7 +21,58 @@ player = Player("Name", world.startingRoom)
 
 
 # FILL THIS IN
-traversalPath = ['n', 's']
+traversalPath = []
+
+# to traverse in opposite directions
+opposite_direction = { 'n':'s', 's':'n', 'e': 'w', 'w' : 'e' }
+
+# keeps track of the previous directions taken
+prev_dir = [None]
+
+# keeps track of the rooms traversed
+available_exits = {}
+visited = {}
+
+# pseudocode:
+# make a loop that:
+# 1. checks the current room's available exits
+# 2. populates/logs:
+    # a. the available_exits dict with a stack of available exits(directions) from the current node
+    # b. the visted dict with the traversed nodes
+# 3. traverses to each available exit from each node
+    # a. by popping exit stack and traversing to the popped node
+        # logging the popped node to traversal path
+        # logging the previous direction taken to previous_room
+    # b. and backtracking at a leaf node until all available exits from each node is cleared
+# 4. ends when all nodes are visited, matching the roomGraph
+
+# while visited rooms is less than the entire room graph
+while len(visited) < len(roomGraph):
+    room_id = player.currentRoom.id
+    # if the current node isnt in the exits dict
+    if room_id not in available_exits:
+        # put it in there, with the available exits stack
+        available_exits[room_id] = player.currentRoom.getExits()
+        # log the visited node
+        visited[room_id] = room_id
+
+    # traverse until each node's exit stack is empty
+    if len(available_exits[room_id]) < 1: # if it is empty
+        # pop the previous direction
+        previous_direction = prev_dir.pop()
+        # add that you backtracked to the traversalPath
+        traversalPath.append(previous_direction)
+        # travel to the popped direction
+        player.travel(previous_direction)
+    else: # if it ain't empty
+        # pop the stack
+        new_room = available_exits[room_id].pop()
+        # keep track of the previous direction you went by logging the opposite direction of the new room you're going to
+        prev_dir.append(opposite_direction[new_room])
+        # log the node you're gonna traverse
+        traversalPath.append(new_room)
+        # move to the new room
+        player.travel(new_room)
 
 
 # TRAVERSAL TEST
