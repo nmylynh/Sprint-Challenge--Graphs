@@ -33,18 +33,6 @@ prev_dir = [None]
 available_exits = {}
 visited = {}
 
-# pseudocode:
-# make a loop that:
-# 1. checks the current room's available exits
-# 2. populates/logs:
-    # a. the available_exits dict with a stack of available exits(directions) from the current node
-    # b. the visted dict with the traversed nodes
-# 3. traverses to each available exit from each node
-    # a. by popping exit stack and traversing to the popped node
-        # logging the popped node to traversal path
-        # logging the previous direction taken to previous_room
-    # b. and backtracking at a leaf node until all available exits from each node is cleared
-# 4. ends when all nodes are visited, matching the roomGraph
 
 # while visited rooms is less than the entire room graph
 while len(visited) < len(roomGraph):
